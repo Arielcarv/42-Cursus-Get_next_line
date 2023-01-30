@@ -1,32 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.h                                    :+:      :+:    :+:   */
+/*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: arcarval <arcarval@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/01/20 19:14:17 by arcarval          #+#    #+#             */
-/*   Updated: 2023/01/29 21:19:32 by arcarval         ###   ########.fr       */
+/*   Created: 2023/01/29 19:39:49 by arcarval          #+#    #+#             */
+/*   Updated: 2023/01/29 21:06:01 by arcarval         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef GET_NEXT_LINE_H
+#include <fcntl.h>
+#include <stdio.h>
+#include "get_next_line.h"
 
-# define GET_NEXT_LINE_H
-
-# ifndef BUFFER_SIZE
-#  define BUFFER_SIZE 10
-# endif
-
-# include <stdlib.h>
-# include <unistd.h>
-
-typedef struct s_list
+int	main(void)
 {
-	char			*str;
-	struct s_list	*next;
-}					t_list;
+	int		fd;
+	char	*line;
 
-char	*get_next_line(int file_descriptor);
-
-#endif
+	fd = open("file2.txt", O_RDONLY);
+	while (1)
+	{
+		line = get_next_line(fd);
+		printf("LINE: %s", line);
+		if (line == NULL)
+			break ;
+		free(line);
+	}
+	return (0);
+}
