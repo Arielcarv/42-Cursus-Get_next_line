@@ -6,7 +6,7 @@
 /*   By: arcarval <arcarval@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/29 19:39:49 by arcarval          #+#    #+#             */
-/*   Updated: 2023/01/29 21:06:01 by arcarval         ###   ########.fr       */
+/*   Updated: 2023/01/31 22:45:14 by arcarval         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,13 +20,14 @@ int	main(void)
 	char	*line;
 
 	fd = open("file2.txt", O_RDONLY);
-	while (1)
+	while (fd > 0)
 	{
 		line = get_next_line(fd);
-		printf("LINE: %s", line);
+		printf("LINE: %s\n", line);
 		if (line == NULL)
 			break ;
 		free(line);
 	}
+	close(fd);
 	return (0);
 }

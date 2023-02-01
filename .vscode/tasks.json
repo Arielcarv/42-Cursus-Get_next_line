@@ -11,7 +11,7 @@
                 // "-D",
                 // "BUFFER_SIZE=1",
                 "-o",
-                "${fileDirname}/${fileBasenameNoExtension}.o",
+                "${fileDirname}/main.o",
             ],
             "options": {
                 "cwd": "${fileDirname}"
