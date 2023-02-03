@@ -6,7 +6,7 @@
 /*   By: arcarval <arcarval@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/20 19:14:09 by arcarval          #+#    #+#             */
-/*   Updated: 2023/02/01 22:02:29 by arcarval         ###   ########.fr       */
+/*   Updated: 2023/02/03 14:19:38 by arcarval         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,11 +60,12 @@ char	*update_static_buffer(char *static_buffer, int size_till_linebreak)
 	buffer_length = ft_strlen(static_buffer) - size_till_linebreak + 1;
 	buffer = malloc(sizeof(char) * buffer_length);
 	if (!buffer)
-		return ;
+		return (NULL);
 	ft_strlcpy(buffer, static_buffer + size_till_linebreak, buffer_length);
 	free(static_buffer);
 	static_buffer = NULL;
 	static_buffer = ft_strjoin(static_buffer, buffer);
+	free(buffer);
 	return (static_buffer);
 }
 
@@ -76,13 +77,16 @@ char	*get_next_line(int fd)
 
 	if (fd < 0 || BUFFER_SIZE <= 0 || read(fd, &line, 0) < 0)
 		return (NULL);
-	// 1. Read file and store it in static_buffer till find a '\n'
 	static_buffer = read_file_to_buffer(fd, static_buffer);
-	// 2. Find the first '\n' in static_buffer
+	if (!static_buffer || ft_strlen(static_buffer) == 0)
+	{
+		free(static_buffer);
+		static_buffer = NULL;
+		return (NULL);
+	}
 	line = NULL;
 	size_with_linebreak = (ft_strchr(static_buffer, '\n') - static_buffer) + 1;
 	line = extract_line_from_buffer(static_buffer, size_with_linebreak);
-	// 3. Move static till the next '\n'
 	static_buffer = update_static_buffer(static_buffer, size_with_linebreak);
 	return (line);
 }
