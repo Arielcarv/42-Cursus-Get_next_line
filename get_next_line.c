@@ -6,7 +6,7 @@
 /*   By: arcarval <arcarval@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/20 19:14:09 by arcarval          #+#    #+#             */
-/*   Updated: 2023/02/03 14:19:38 by arcarval         ###   ########.fr       */
+/*   Updated: 2023/02/04 12:41:31 by arcarval         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ char	*extract_line_from_buffer(char *static_buffer, int len_to_linebreak)
 char	*read_file_to_buffer(int fd, char *static_buffer)
 {
 	char	*temp_buffer;
+	char	*temp_static_buffer;
 	int		bytes_read;
 
 	temp_buffer = malloc(sizeof(char) * (BUFFER_SIZE + 1));
@@ -46,7 +47,9 @@ char	*read_file_to_buffer(int fd, char *static_buffer)
 			return (NULL);
 		}
 		temp_buffer[bytes_read] = '\0';
-		static_buffer = ft_strjoin(static_buffer, temp_buffer);
+		temp_static_buffer = ft_strjoin(static_buffer, temp_buffer);
+		free(static_buffer);
+		static_buffer = temp_static_buffer;
 	}
 	free(temp_buffer);
 	return (static_buffer);
