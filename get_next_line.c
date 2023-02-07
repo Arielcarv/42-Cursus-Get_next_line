@@ -6,16 +6,11 @@
 /*   By: arcarval <arcarval@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/20 19:14:09 by arcarval          #+#    #+#             */
-/*   Updated: 2023/02/04 12:41:31 by arcarval         ###   ########.fr       */
+/*   Updated: 2023/02/06 23:17:16 by arcarval         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
-
-#include <stdlib.h>
-#include <unistd.h>
-#include <fcntl.h>
-#include <stdio.h>
 
 char	*extract_line_from_buffer(char *static_buffer, int len_to_linebreak)
 {
@@ -44,6 +39,7 @@ char	*read_file_to_buffer(int fd, char *static_buffer)
 		if (bytes_read == -1)
 		{
 			free(temp_buffer);
+			temp_buffer = NULL;
 			return (NULL);
 		}
 		temp_buffer[bytes_read] = '\0';
@@ -52,6 +48,7 @@ char	*read_file_to_buffer(int fd, char *static_buffer)
 		static_buffer = temp_static_buffer;
 	}
 	free(temp_buffer);
+	temp_buffer = NULL;
 	return (static_buffer);
 }
 
@@ -61,15 +58,22 @@ char	*update_static_buffer(char *static_buffer, int size_till_linebreak)
 	char	*buffer;
 
 	buffer_length = ft_strlen(static_buffer) - size_till_linebreak + 1;
-	buffer = malloc(sizeof(char) * buffer_length);
-	if (!buffer)
+	if (!buffer_length)
 		return (NULL);
+	buffer = malloc(sizeof(char) * buffer_length);
 	ft_strlcpy(buffer, static_buffer + size_till_linebreak, buffer_length);
 	free(static_buffer);
 	static_buffer = NULL;
 	static_buffer = ft_strjoin(static_buffer, buffer);
 	free(buffer);
 	return (static_buffer);
+}
+
+int	size_or_linebreak(char const *str)
+{
+	if (ft_strchr(str, '\n'))
+		return (ft_strchr(str, '\n') - str);
+	return(ft_strlen(str));
 }
 
 char	*get_next_line(int fd)
@@ -88,7 +92,7 @@ char	*get_next_line(int fd)
 		return (NULL);
 	}
 	line = NULL;
-	size_with_linebreak = (ft_strchr(static_buffer, '\n') - static_buffer) + 1;
+	size_with_linebreak = size_or_linebreak(static_buffer) + 1;
 	line = extract_line_from_buffer(static_buffer, size_with_linebreak);
 	static_buffer = update_static_buffer(static_buffer, size_with_linebreak);
 	return (line);
