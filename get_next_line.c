@@ -6,7 +6,7 @@
 /*   By: arcarval <arcarval@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/20 19:14:09 by arcarval          #+#    #+#             */
-/*   Updated: 2023/02/06 23:17:16 by arcarval         ###   ########.fr       */
+/*   Updated: 2023/02/08 00:46:04 by arcarval         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,12 +36,8 @@ char	*read_file_to_buffer(int fd, char *static_buffer)
 	while (!ft_strchr(static_buffer, '\n') && bytes_read != 0)
 	{
 		bytes_read = read(fd, temp_buffer, BUFFER_SIZE);
-		if (bytes_read == -1)
-		{
-			free(temp_buffer);
-			temp_buffer = NULL;
-			return (NULL);
-		}
+		if (bytes_read <= 0)
+			break ;
 		temp_buffer[bytes_read] = '\0';
 		temp_static_buffer = ft_strjoin(static_buffer, temp_buffer);
 		free(static_buffer);
@@ -49,7 +45,9 @@ char	*read_file_to_buffer(int fd, char *static_buffer)
 	}
 	free(temp_buffer);
 	temp_buffer = NULL;
-	return (static_buffer);
+	if (bytes_read == 0)
+		return (static_buffer);
+	return (NULL);
 }
 
 char	*update_static_buffer(char *static_buffer, int size_till_linebreak)
@@ -73,7 +71,7 @@ int	size_or_linebreak(char const *str)
 {
 	if (ft_strchr(str, '\n'))
 		return (ft_strchr(str, '\n') - str);
-	return(ft_strlen(str));
+	return (ft_strlen(str));
 }
 
 char	*get_next_line(int fd)
