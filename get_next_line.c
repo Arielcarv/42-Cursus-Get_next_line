@@ -6,27 +6,32 @@
 /*   By: arcarval <arcarval@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/20 19:14:09 by arcarval          #+#    #+#             */
-/*   Updated: 2023/02/08 00:46:04 by arcarval         ###   ########.fr       */
+/*   Updated: 2023/02/09 00:48:20 by arcarval         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-char	*extract_line_from_buffer(char *static_buffer, int len_to_linebreak)
+static int	ft_strlcpy(char *dest, char const *src, int size)
 {
-	char	*line;
+	int	index;
 
-	line = malloc(sizeof(char) * (len_to_linebreak));
-	if (!line)
-		return (NULL);
-	ft_strlcpy(line, static_buffer, len_to_linebreak);
-	return (line);
+	index = 0;
+	if (size > 0)
+	{
+		while (src[index] && (index < size - 1))
+		{
+			dest[index] = src[index];
+			index++;
+		}
+		dest[index] = '\0';
+	}
+	return (ft_strlen(src));
 }
 
 char	*read_file_to_buffer(int fd, char *static_buffer)
 {
 	char	*temp_buffer;
-	char	*temp_static_buffer;
 	int		bytes_read;
 
 	temp_buffer = malloc(sizeof(char) * (BUFFER_SIZE + 1));
@@ -39,27 +44,45 @@ char	*read_file_to_buffer(int fd, char *static_buffer)
 		if (bytes_read <= 0)
 			break ;
 		temp_buffer[bytes_read] = '\0';
-		temp_static_buffer = ft_strjoin(static_buffer, temp_buffer);
-		free(static_buffer);
-		static_buffer = temp_static_buffer;
+		static_buffer = ft_strjoin(static_buffer, temp_buffer);
 	}
 	free(temp_buffer);
-	temp_buffer = NULL;
-	if (bytes_read == 0)
-		return (static_buffer);
-	return (NULL);
+	return (static_buffer);
 }
 
+char	*extract_line_from_buffer(char *static_buffer, int len_to_linebreak)
+{
+	char	*line;
+
+	if (!static_buffer)
+		return (NULL);
+	line = ft_calloc(len_to_linebreak, sizeof(char));
+	if (!line)
+		return (NULL);
+	ft_strlcpy(line, static_buffer, len_to_linebreak);
+	// ft_memcpy(line, static_buffer, len_to_linebreak);
+	return (line);
+}
+
+// TODO: refactor the update static buffer function to not return leaks and free everything
 char	*update_static_buffer(char *static_buffer, int size_till_linebreak)
 {
 	int		buffer_length;
 	char	*buffer;
 
-	buffer_length = ft_strlen(static_buffer) - size_till_linebreak + 1;
-	if (!buffer_length)
+	if (!static_buffer)
+	{
+		free(static_buffer);
 		return (NULL);
-	buffer = malloc(sizeof(char) * buffer_length);
-	ft_strlcpy(buffer, static_buffer + size_till_linebreak, buffer_length);
+	}
+	buffer_length = ft_strlen(static_buffer) - size_till_linebreak + 1;
+	if (!static_buffer || !static_buffer[buffer_length])
+	{
+		free(static_buffer);
+		return (NULL);
+	}
+	buffer = malloc(buffer_length * sizeof(char));
+	ft_strlcpy(buffer, static_buffer + size_till_linebreak, buffer_length + 1);
 	free(static_buffer);
 	static_buffer = NULL;
 	static_buffer = ft_strjoin(static_buffer, buffer);
@@ -70,10 +93,10 @@ char	*update_static_buffer(char *static_buffer, int size_till_linebreak)
 int	size_or_linebreak(char const *str)
 {
 	if (ft_strchr(str, '\n'))
-		return (ft_strchr(str, '\n') - str);
+		return ((ft_strchr(str, '\n') - str) + 1);
 	return (ft_strlen(str));
 }
-
+// Remove a function, by limitations of the norminette
 char	*get_next_line(int fd)
 {
 	static char	*static_buffer;
@@ -92,6 +115,7 @@ char	*get_next_line(int fd)
 	line = NULL;
 	size_with_linebreak = size_or_linebreak(static_buffer) + 1;
 	line = extract_line_from_buffer(static_buffer, size_with_linebreak);
+	// TODO: check update_static_buffer
 	static_buffer = update_static_buffer(static_buffer, size_with_linebreak);
 	return (line);
 }
