@@ -6,7 +6,7 @@
 /*   By: arcarval <arcarval@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/20 19:13:50 by arcarval          #+#    #+#             */
-/*   Updated: 2023/02/04 12:41:01 by arcarval         ###   ########.fr       */
+/*   Updated: 2023/02/09 00:13:47 by arcarval         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,22 @@ int	ft_strlen(char const *str)
 	return (length);
 }
 
+void	*ft_calloc(size_t number_spaces, size_t size)
+{
+	char	*empty_str;
+	size_t	total_size;
+
+	total_size = number_spaces * size;
+	empty_str = malloc(total_size);
+	if (empty_str != 0)
+	{
+		while (total_size-- > 0)
+			empty_str[total_size] = 0;
+		return (empty_str);
+	}
+	return (NULL);
+}
+
 void	*ft_memcpy(void *dest, const void *src, size_t char_number)
 {
 	char	*temp_dest_pointer;
@@ -55,38 +71,29 @@ void	*ft_memcpy(void *dest, const void *src, size_t char_number)
 	return (dest);
 }
 
-char	*ft_strjoin(char const *str1, char const *str2)
+char	*ft_strjoin(char *str1, char *str2)
 {
 	int		str1_length;
 	int		str2_length;
 	char	*dest;
 
-	if (!str1 && !str2)
+	if (!str1)
+		str1 = ft_calloc(1, sizeof(char));
+	if (!str2)
+	{
+		free(str2);
 		return (NULL);
+	}
 	str1_length = ft_strlen(str1);
 	str2_length = ft_strlen(str2);
-	dest = malloc(sizeof(char) * (str1_length + str2_length + 1));
+	dest = malloc((str1_length + str2_length + 1) * sizeof(char));
 	if (!dest)
-		return (0);
+		return (NULL);
 	ft_memcpy(dest, str1, str1_length);
 	ft_memcpy(dest + str1_length, str2, str2_length);
+	// ft_strlcpy(dest, str1, str1_length);
+	// ft_strlcpy(dest + str1_length, str2, str2_length);
 	*(dest + str1_length + str2_length) = '\0';
+	free(str1);
 	return (dest);
-}
-
-int	ft_strlcpy(char *dest, char const *src, int size)
-{
-	int	index;
-
-	index = 0;
-	if (size > 0)
-	{
-		while ((index < size - 1) && src[index])
-		{
-			dest[index] = src[index];
-			index++;
-		}
-		dest[index] = '\0';
-	}
-	return (ft_strlen(src));
 }
