@@ -6,13 +6,12 @@
 /*   By: arcarval <arcarval@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/29 19:39:49 by arcarval          #+#    #+#             */
-/*   Updated: 2023/02/09 22:32:17 by arcarval         ###   ########.fr       */
+/*   Updated: 2023/02/09 23:32:50 by arcarval         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <fcntl.h>
-#include <stdio.h>
 #include "get_next_line.h"
+#include <stdio.h>
 
 int	main(void)
 {

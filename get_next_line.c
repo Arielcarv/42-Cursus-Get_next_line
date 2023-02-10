@@ -6,7 +6,7 @@
 /*   By: arcarval <arcarval@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/20 19:14:09 by arcarval          #+#    #+#             */
-/*   Updated: 2023/02/09 23:16:27 by arcarval         ###   ########.fr       */
+/*   Updated: 2023/02/10 00:08:16 by arcarval         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,19 +59,19 @@ static char	*update_static_buffer(char *static_buffer)
 {
 	int		buffer_length;
 	char	*buffer;
-	int		size;
+	int		size_with_compensation;
 
-	size = size_or_linebreak(static_buffer);
-	if (!static_buffer[size])
+	if (!static_buffer[size_or_linebreak(static_buffer)])
 	{
 		free(static_buffer);
 		return (NULL);
 	}
-	buffer_length = (ft_strlen(static_buffer) - (size + 1) + 1);
+	size_with_compensation = size_or_linebreak(static_buffer) + 1;
+	buffer_length = (ft_strlen(static_buffer) - size_with_compensation + 1);
 	buffer = malloc(buffer_length * sizeof(char));
 	if (!buffer)
 		return (NULL);
-	ft_strlcpy(buffer, static_buffer + (size + 1), buffer_length);
+	ft_strlcpy(buffer, static_buffer + size_with_compensation, buffer_length);
 	free(static_buffer);
 	return (buffer);
 }
