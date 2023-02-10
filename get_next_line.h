@@ -6,7 +6,7 @@
 /*   By: arcarval <arcarval@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/20 19:14:17 by arcarval          #+#    #+#             */
-/*   Updated: 2023/02/09 00:49:06 by arcarval         ###   ########.fr       */
+/*   Updated: 2023/02/09 21:14:32 by arcarval         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,8 @@
 char	*get_next_line(int file_descriptor);
 
 void	*ft_calloc(size_t nmemb, size_t size);
-void	*ft_memcpy(void *dest, const void *src, size_t char_number);
 char	*ft_strchr(char const *str, int caracter);
+int		ft_strlcpy(char *dest, char const *src, int size);
 int		ft_strlen(char const *str);
 char	*ft_strjoin(char *str1, char *str2);
 

@@ -6,7 +6,7 @@
 /*   By: arcarval <arcarval@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/29 19:39:49 by arcarval          #+#    #+#             */
-/*   Updated: 2023/02/09 19:25:39 by arcarval         ###   ########.fr       */
+/*   Updated: 2023/02/09 22:32:17 by arcarval         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ int	main(void)
 	int		fd;
 	char	*line;
 
-	fd = open("./6_no_nl", O_RDONLY);
+	fd = open("./multiple_line_no_nl", O_RDONLY);
 	while (fd > 0)
 	{
 		line = get_next_line(fd);

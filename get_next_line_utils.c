@@ -6,7 +6,7 @@
 /*   By: arcarval <arcarval@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/20 19:13:50 by arcarval          #+#    #+#             */
-/*   Updated: 2023/02/09 21:12:48 by arcarval         ###   ########.fr       */
+/*   Updated: 2023/02/09 22:39:30 by arcarval         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,11 @@ int	ft_strlcpy(char *dest, char const *src, int size)
 
 	index = 0;
 	if (size <= 0)
+	{
+		free(dest);
+		dest = NULL;
 		return (0);
+	}
 	while (src[index] && (index < size - 1))
 	{
 		dest[index] = src[index];
