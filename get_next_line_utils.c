@@ -6,11 +6,28 @@
 /*   By: arcarval <arcarval@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/20 19:13:50 by arcarval          #+#    #+#             */
-/*   Updated: 2023/02/09 00:13:47 by arcarval         ###   ########.fr       */
+/*   Updated: 2023/02/09 21:12:48 by arcarval         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
+
+void	*ft_calloc(size_t number_spaces, size_t size)
+{
+	char	*empty_str;
+	size_t	total_size;
+
+	total_size = number_spaces * size;
+	empty_str = malloc(total_size);
+	if (empty_str != 0)
+	{
+		while (total_size-- > 0)
+			empty_str[total_size] = 0;
+		return (empty_str);
+	}
+	free(empty_str);
+	return (NULL);
+}
 
 char	*ft_strchr(char const *str, int caracter)
 {
@@ -28,6 +45,22 @@ char	*ft_strchr(char const *str, int caracter)
 	return (0);
 }
 
+int	ft_strlcpy(char *dest, char const *src, int size)
+{
+	int	index;
+
+	index = 0;
+	if (size <= 0)
+		return (0);
+	while (src[index] && (index < size - 1))
+	{
+		dest[index] = src[index];
+		index++;
+	}
+	dest[index] = '\0';
+	return (index);
+}
+
 int	ft_strlen(char const *str)
 {
 	int	length;
@@ -38,37 +71,6 @@ int	ft_strlen(char const *str)
 	while (str[length])
 		length++;
 	return (length);
-}
-
-void	*ft_calloc(size_t number_spaces, size_t size)
-{
-	char	*empty_str;
-	size_t	total_size;
-
-	total_size = number_spaces * size;
-	empty_str = malloc(total_size);
-	if (empty_str != 0)
-	{
-		while (total_size-- > 0)
-			empty_str[total_size] = 0;
-		return (empty_str);
-	}
-	return (NULL);
-}
-
-void	*ft_memcpy(void *dest, const void *src, size_t char_number)
-{
-	char	*temp_dest_pointer;
-	char	*temp_src_pointer;
-
-	if (!dest)
-		return (NULL);
-	temp_dest_pointer = (char *) dest;
-	temp_src_pointer = (char *) src;
-	if (temp_dest_pointer != 0)
-		while (char_number-- > 0)
-			*(temp_dest_pointer++) = *(temp_src_pointer++);
-	return (dest);
 }
 
 char	*ft_strjoin(char *str1, char *str2)
@@ -89,11 +91,8 @@ char	*ft_strjoin(char *str1, char *str2)
 	dest = malloc((str1_length + str2_length + 1) * sizeof(char));
 	if (!dest)
 		return (NULL);
-	ft_memcpy(dest, str1, str1_length);
-	ft_memcpy(dest + str1_length, str2, str2_length);
-	// ft_strlcpy(dest, str1, str1_length);
-	// ft_strlcpy(dest + str1_length, str2, str2_length);
-	*(dest + str1_length + str2_length) = '\0';
+	ft_strlcpy(dest, str1, str1_length + 1);
+	ft_strlcpy(dest + str1_length, str2, str2_length + 1);
 	free(str1);
 	return (dest);
 }
